@@ -281,3 +281,115 @@ Se creó el módulo analitica.js para centralizar las funciones de análisis.
 Se utilizó module.exports para exportar las funciones y require() para importarlas desde pruebas.js.
 
 Se decidió mantener los ciclos for...of para comprender los patrones de recorrido, acumulación, conteo y máximo antes de utilizar métodos de arreglos.
+
+## MiniReto 3: Métodos de arreglos, agrupaciones y rankings
+
+### 1. Plan de trabajo
+
+Se implementaron nuevas versiones de los indicadores del MiniReto 2 utilizando métodos de arreglos.
+
+También se crearon funciones para agrupar las ventas por ciudad, agrupar unidades por producto y generar un ranking de los productos que más dinero generan.
+
+### 2. Funciones implementadas
+
+**totalVendidoM(ventas)**
+
+- ¿Qué recorro?: El arreglo de ventas.
+- ¿Qué filtro?: Ventas con cantidad mayor que cero.
+- ¿Qué transformo?: Cada venta en su valor monetario mediante map().
+- ¿Qué acumulo?: El dinero generado por las ventas mediante reduce().
+
+**unidadesVendidasM(ventas)**
+
+- ¿Qué recorro?: El arreglo de ventas.
+- ¿Qué filtro?: Ventas con cantidad mayor que cero.
+- ¿Qué transformo?: Cada venta en su cantidad de unidades.
+- ¿Qué acumulo?: El total de unidades vendidas.
+
+**ventasPorCiudadM(ventas, ciudad)**
+
+- ¿Qué recorro?: El arreglo de ventas.
+- ¿Qué filtro?: Ventas válidas que coincidan con la ciudad solicitada.
+- ¿Qué transformo?: Cada venta en su valor monetario.
+- ¿Qué acumulo?: El dinero generado en la ciudad seleccionada.
+- ¿Cómo comparo?: Normalizo los nombres con trim() y toLowerCase().
+
+**totalPorCiudad(ventas)**
+
+- ¿Qué recorro?: Todas las ventas.
+- ¿Qué filtro?: Registros con cantidad mayor que cero.
+- ¿Qué transformo?: Normalizo los nombres de las ciudades.
+- ¿Qué acumulo?: El dinero generado por cada ciudad.
+- ¿Cómo agrupo?: Utilizo reduce() para crear un objeto cuyas claves son las ciudades.
+
+**unidadesPorProducto(ventas)**
+
+- ¿Qué recorro?: Todas las ventas.
+- ¿Qué filtro?: Ventas con cantidad mayor que cero.
+- ¿Qué transformo?: Identifico el nombre del producto.
+- ¿Qué acumulo?: Las unidades vendidas de cada producto.
+- ¿Cómo agrupo?: Utilizo reduce() para crear un objeto con los productos como claves.
+
+**topProductosPorValor(ventas, k)**
+
+- ¿Qué recorro?: Todas las ventas.
+- ¿Qué filtro?: Ventas con cantidad mayor que cero.
+- ¿Qué transformo?: Agrupo los productos y convierto el resultado en un arreglo de objetos.
+- ¿Qué acumulo?: El dinero generado por cada producto.
+- ¿Cómo ordeno?: Utilizo sort() para organizar los productos de mayor a menor valor.
+- ¿Cómo selecciono?: Utilizo slice() para devolver los primeros k productos.
+
+### 3. Verificación de resultados
+
+Se creó verificar.js para comparar las funciones del MiniReto 2 con las nuevas versiones del MiniReto 3.
+
+Se verificaron:
+
+- totalVendido() y totalVendidoM().
+- unidadesVendidas() y unidadesVendidasM().
+- ventasPorCiudad() y ventasPorCiudadM() para Medellín, Bogotá, Cali y Pereira.
+
+Los resultados coincidieron y las pruebas mostraron OK.
+
+### 4. Resultados obtenidos
+
+**Total por ciudad**
+
+| Ciudad | Total vendido |
+|---|---:|
+| Medellín | 356000 |
+| Bogotá | 276000 |
+| Cali | 185000 |
+| Pereira | 168000 |
+
+**Unidades por producto**
+
+| Producto | Unidades |
+|---|---:|
+| Origen Huila 500 g | 7 |
+| Origen Nariño 250 g | 6 |
+| Origen Sierra 500 g | 5 |
+| Prensa francesa | 2 |
+| Molino manual | 1 |
+
+**Top 3 productos por valor**
+
+| Producto | Total vendido |
+|---|---:|
+| Origen Huila 500 g | 294000 |
+| Origen Sierra 500 g | 225000 |
+| Prensa francesa | 190000 |
+
+### 5. Decisiones técnicas
+
+Se conservaron las funciones con ciclos del MiniReto 2 para poder comparar sus resultados.
+
+Se utilizaron filter(), map() y reduce() para construir las nuevas versiones.
+
+Se utilizó Object.entries() para transformar los objetos agrupados en arreglos.
+
+Se utilizó sort() para ordenar los rankings y slice() para seleccionar los primeros resultados.
+
+Se evitó modificar el arreglo original de ventas durante el ordenamiento.
+
+Se mantuvo la exclusión de ventas con cantidad igual o inferior a cero.

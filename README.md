@@ -19,13 +19,13 @@ Analizar los registros de ventas utilizando JavaScript, arreglos de objetos, cic
 
 ## Estructura del proyecto
 
-```text
 cafe-origen-analitica/
 │
 ├── src/
 │   ├── datos.js
 │   ├── analitica.js
-│   └── explorar.js
+│   ├── explorar.js
+│   └── verificar.js
 │
 ├── bitacora.md
 └── README.md
@@ -58,3 +58,26 @@ Funcionalidades implementadas:
 - Cálculo del ticket promedio.
 - Análisis de ventas por ciudad.
 - Pruebas con arreglos completos, individuales y vacíos.
+
+## Funcionalidades implementadas
+
+### MiniReto 1
+- Exploración del historial de ventas.
+- Modelado de datos mediante arreglos de objetos.
+- Identificación de casos borde.
+
+### MiniReto 2
+- Cálculo del total vendido.
+- Cálculo de unidades vendidas.
+- Identificación de la venta mayor.
+- Cálculo del ticket promedio.
+- Ventas por ciudad utilizando ciclos.
+
+### MiniReto 3
+- Implementación de map(), filter() y reduce().
+- Comparación entre ciclos y métodos de arreglos.
+- Agrupación de ventas por ciudad.
+- Agrupación de unidades por producto.
+- Ranking de productos por unidades.
+- Top de productos por dinero generado.
+- Verificación de resultados mediante verificar.js.

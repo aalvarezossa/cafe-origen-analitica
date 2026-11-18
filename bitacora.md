@@ -1,6 +1,6 @@
 # Bitácora - Café Origen Analítica
 
-## MiniReto 1: Exploración y modelado de datos
+## MiniReto 1:
 
 ### 1. Plan de trabajo
 
@@ -56,3 +56,228 @@ Decisión: No eliminar estos registros, porque un mismo cliente puede realizar v
 Se utilizó module.exports para exportar el arreglo de ventas y require() para importarlo desde otros archivos.
 
 Se decidió conservar los datos originales para evitar modificar accidentalmente el historial de ventas.
+
+## MiniReto 2:
+
+FUNCIÓN valorVenta(venta)
+
+    MULTIPLICAR venta.cantidad POR venta.precio
+
+    DEVOLVER resultado
+
+FIN FUNCIÓN
+
+FUNCIÓN totalVendido(ventas)
+
+    INICIAR acumulador EN 0
+
+    PARA CADA venta EN ventas
+
+        SI venta.cantidad ES MAYOR QUE 0
+
+            SUMAR valorVenta(venta) AL acumulador
+
+        FIN SI
+
+    FIN PARA
+
+    DEVOLVER acumulador
+
+FIN FUNCIÓN
+
+FUNCIÓN unidadesVendidas(ventas)
+
+    INICIAR acumulador EN 0
+
+    PARA CADA venta EN ventas
+
+        SI venta.cantidad ES MAYOR QUE 0
+
+            SUMAR venta.cantidad AL acumulador
+
+        FIN SI
+
+    FIN PARA
+
+    DEVOLVER acumulador
+
+FIN FUNCIÓN
+
+FUNCIÓN ventaMayor(ventas)
+
+    INICIAR ventaMaxima EN null
+    INICIAR valorMaximo EN 0
+
+    PARA CADA venta EN ventas
+
+        SI venta.cantidad ES MAYOR QUE 0
+
+            CALCULAR valorVenta(venta)
+
+            SI valorVenta ES MAYOR QUE valorMaximo
+
+                ACTUALIZAR valorMaximo
+                ACTUALIZAR ventaMaxima
+
+            FIN SI
+
+        FIN SI
+
+    FIN PARA
+
+    DEVOLVER ventaMaxima
+
+FIN FUNCIÓN
+
+FUNCIÓN ticketPromedio(ventas)
+
+    INICIAR total EN 0
+    INICIAR contador EN 0
+
+    PARA CADA venta EN ventas
+
+        SI venta.cantidad ES MAYOR QUE 0
+
+            SUMAR valorVenta(venta) AL total
+
+            AUMENTAR contador EN 1
+
+        FIN SI
+
+    FIN PARA
+
+    SI contador ES IGUAL A 0
+
+        DEVOLVER 0
+
+    FIN SI
+
+    DEVOLVER total / contador
+
+FIN FUNCIÓN
+
+FUNCIÓN ventasPorCiudad(ventas, ciudad)
+
+    INICIAR acumulador EN 0
+
+    NORMALIZAR nombre de ciudad recibida
+
+    PARA CADA venta EN ventas
+
+        NORMALIZAR ciudad del registro
+
+        SI ambas ciudades son iguales
+        Y venta.cantidad ES MAYOR QUE 0
+
+            SUMAR valorVenta(venta) AL acumulador
+
+        FIN SI
+
+    FIN PARA
+
+    DEVOLVER acumulador
+
+FIN FUNCIÓN
+
+## MiniReto 2: Indicadores básicos de negocio
+
+### 1. Plan en pseudocódigo
+
+Se diseñaron seis funciones:
+
+- valorVenta(): multiplica cantidad por precio.
+- totalVendido(): acumula el valor de las ventas válidas.
+- unidadesVendidas(): acumula las unidades vendidas.
+- ventaMayor(): identifica el registro con mayor valor.
+- ticketPromedio(): divide el total vendido entre las compras válidas.
+- ventasPorCiudad(): acumula las ventas correspondientes a una ciudad.
+
+Se utilizaron ciclos for...of para recorrer los registros.
+
+### 2. Patrones utilizados
+
+**Acumulador:**
+Se utilizó para sumar el dinero y las unidades vendidas.
+
+**Contador:**
+Se utilizó en ticketPromedio() para contar las compras válidas.
+
+**Máximo:**
+Se utilizó en ventaMayor() para identificar la venta de mayor valor.
+
+### 3. Casos borde y decisiones
+
+- Las ventas con cantidad igual o inferior a cero no participan en los indicadores.
+- Si el arreglo está vacío, los acumuladores devuelven 0.
+- ventaMayor() devuelve null cuando no existen ventas válidas.
+- ticketPromedio() devuelve 0 cuando no existen compras válidas.
+- La comparación de ciudades ignora mayúsculas y espacios sobrantes.
+
+### 4. Tabla de traza: totalVendido()
+
+| ID | Valor | Acumulado |
+|---|---:|---:|
+| 1 | 84000 | 84000 |
+| 2 | 26000 | 110000 |
+| 3 | 95000 | 205000 |
+| 4 | 42000 | 247000 |
+| 5 | 135000 | 382000 |
+| 6 | 52000 | 434000 |
+| 7 | 120000 | 554000 |
+| 8 | 0 | 554000 |
+| 9 | 90000 | 644000 |
+| 10 | 168000 | 812000 |
+| 11 | 95000 | 907000 |
+| 12 | 78000 | 985000 |
+
+Resultado: 985000.
+
+### 5. Tabla de traza: unidadesVendidas()
+
+| ID | Cantidad | Acumulado |
+|---|---:|---:|
+| 1 | 2 | 2 |
+| 2 | 1 | 3 |
+| 3 | 1 | 4 |
+| 4 | 1 | 5 |
+| 5 | 3 | 8 |
+| 6 | 2 | 10 |
+| 7 | 1 | 11 |
+| 8 | 0 | 11 |
+| 9 | 2 | 13 |
+| 10 | 4 | 17 |
+| 11 | 1 | 18 |
+| 12 | 3 | 21 |
+
+Resultado: 21 unidades.
+
+### 6. Resultados obtenidos
+
+| Indicador | Resultado |
+|---|---:|
+| Total vendido | $985.000 |
+| Unidades vendidas | 21 |
+| Venta mayor | $168.000 |
+| Ticket promedio | $89.545,45 |
+| Ventas Medellín | $356.000 |
+| Ventas Bogotá | $276.000 |
+| Ventas Cali | $185.000 |
+| Ventas Pereira | $168.000 |
+
+### 7. Pruebas realizadas
+
+Se probaron las funciones con:
+
+- El arreglo completo de 12 registros.
+- Un arreglo de un solo registro.
+- Un arreglo vacío.
+
+Los resultados obtenidos coincidieron con los cálculos manuales.
+
+### 8. Decisiones técnicas
+
+Se creó el módulo analitica.js para centralizar las funciones de análisis.
+
+Se utilizó module.exports para exportar las funciones y require() para importarlas desde pruebas.js.
+
+Se decidió mantener los ciclos for...of para comprender los patrones de recorrido, acumulación, conteo y máximo antes de utilizar métodos de arreglos.

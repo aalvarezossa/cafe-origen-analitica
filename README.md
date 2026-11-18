@@ -44,3 +44,17 @@ node src/explorar.js
 Versión 0.1 - MiniReto 1: Exploración y modelado de datos.
 
 Proyecto en desarrollo.
+
+Versión 0.1 - MiniReto 1: Exploración y modelado de datos.
+
+Versión 0.1 - MiniReto 2: Indicadores básicos de negocio.
+
+Funcionalidades implementadas:
+
+- Exploración del historial de ventas.
+- Cálculo del total vendido.
+- Cálculo de unidades vendidas.
+- Identificación de la venta de mayor valor.
+- Cálculo del ticket promedio.
+- Análisis de ventas por ciudad.
+- Pruebas con arreglos completos, individuales y vacíos.

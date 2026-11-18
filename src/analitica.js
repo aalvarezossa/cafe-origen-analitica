@@ -184,6 +184,40 @@ function topProductosPorValor(ventas, k) {
         .slice(0, Math.max(0, k));
 }
 
+// ==========================================
+// MINIRETO 4: ANÁLISIS POR FECHA
+// ==========================================
+
+// Genera un resumen de las ventas de un día específico
+function ventasDelDia(ventas, fecha) {
+    const ventasDelDia = ventas.filter(venta =>
+        venta.fecha === fecha && venta.cantidad > 0
+    );
+
+    const total = ventasDelDia.reduce(
+        (acumulador, venta) => acumulador + valorVenta(venta),
+        0
+    );
+
+    const unidades = ventasDelDia.reduce(
+        (acumulador, venta) => acumulador + venta.cantidad,
+        0
+    );
+
+    const cantidadVentas = ventasDelDia.length;
+
+    const ticketPromedio = cantidadVentas === 0
+        ? 0
+        : total / cantidadVentas;
+
+    return {
+        fecha,
+        cantidadVentas,
+        unidades,
+        totalVendido: total,
+        ticketPromedio
+    };
+}
 
 // ==========================================
 // EXPORTACIÓN DE FUNCIONES
@@ -204,5 +238,8 @@ module.exports = {
     ventasPorCiudadM,
     totalPorCiudad,
     unidadesPorProducto,
-    topProductosPorValor
+    topProductosPorValor,
+
+    // MiniReto 4
+    ventasDelDia
 };

@@ -393,3 +393,46 @@ Se utilizó sort() para ordenar los rankings y slice() para seleccionar los prim
 Se evitó modificar el arreglo original de ventas durante el ordenamiento.
 
 Se mantuvo la exclusión de ventas con cantidad igual o inferior a cero.
+
+## MiniReto 4: Reporte de negocio y depuración
+
+### 1. Error: Bogotá aparece dos veces
+
+- **Síntoma:** Bogotá aparece como dos grupos diferentes en el reporte de ventas por ciudad.
+- **Entrada que lo produce:** ciudades escritas con diferencias de espacios y mayúsculas, por ejemplo: "Bogotá", " bogotá " y "BOGOTÁ".
+- **Hipótesis:** la agrupación utiliza el nombre original de la ciudad sin normalizarlo.
+- **Prueba realizada:** se creó un arreglo de prueba con tres registros que representan la misma ciudad, pero tienen diferencias de escritura.
+- **Causa:** JavaScript considera diferentes las cadenas cuando tienen espacios o diferencias entre mayúsculas y minúsculas.
+- **Corrección:** en totalPorCiudad() se utiliza trim() para eliminar espacios y se normaliza la escritura de la ciudad antes de agruparla.
+- **Resultado:** los tres registros se agrupan bajo una sola clave: Bogotá. El total obtenido en la prueba es $40.000.
+
+### 2. Error: el ticket promedio devuelve NaN
+
+- **Síntoma:** el ticket promedio muestra NaN cuando se consulta un día sin ventas.
+- **Entrada que lo produce:** una fecha que no tiene registros de ventas, como 2026-09-07.
+- **Hipótesis:** se intenta dividir el total vendido entre cero ventas.
+- **Prueba realizada:** se consultó la función ventasDelDia() con la fecha 2026-09-07 y se verificó el resultado.
+- **Causa:** dividir cero entre cero produce NaN en JavaScript.
+- **Corrección:** antes de calcular el promedio se verifica si la cantidad de ventas es igual a cero. En ese caso, la función devuelve 0.
+- **Resultado:** el día sin ventas devuelve cero en total vendido, unidades, cantidad de ventas y ticket promedio.
+
+### 3. Reporte de negocio
+
+Se creó reporte.js para presentar los indicadores de Café Origen en secciones:
+
+- Resumen general.
+- Ventas por ciudad.
+- Unidades por producto.
+- Top 3 de productos por valor.
+- Resumen de un día con ventas.
+- Resumen de un día sin ventas.
+
+Los valores monetarios se presentan en pesos colombianos utilizando toLocaleString("es-CO").
+
+### 4. Decisiones técnicas
+
+- Se conservaron las funciones de los MiniRetos anteriores.
+- Se agregó ventasDelDia() para analizar una fecha específica.
+- Se mantuvo la normalización de ciudades para evitar agrupaciones duplicadas.
+- Se protegió el cálculo del ticket promedio cuando no existen ventas.
+- Se separó la lógica de cálculo de la presentación del reporte.

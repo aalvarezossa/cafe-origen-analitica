@@ -10,26 +10,22 @@ function valorVenta(venta) {
 // Calcula el dinero total vendido
 function totalVendido(ventas) {
     let total = 0;
-
     for (const venta of ventas) {
         if (venta.cantidad > 0) {
             total += valorVenta(venta);
         }
     }
-
     return total;
 }
 
 // Calcula las unidades totales vendidas
 function unidadesVendidas(ventas) {
     let totalUnidades = 0;
-
     for (const venta of ventas) {
         if (venta.cantidad > 0) {
             totalUnidades += venta.cantidad;
         }
     }
-
     return totalUnidades;
 }
 
@@ -37,18 +33,15 @@ function unidadesVendidas(ventas) {
 function ventaMayor(ventas) {
     let ventaMaxima = null;
     let valorMaximo = 0;
-
     for (const venta of ventas) {
         if (venta.cantidad > 0) {
             const valorActual = valorVenta(venta);
-
             if (valorActual > valorMaximo) {
                 valorMaximo = valorActual;
                 ventaMaxima = venta;
             }
         }
     }
-
     return ventaMaxima;
 }
 
@@ -56,18 +49,15 @@ function ventaMayor(ventas) {
 function ticketPromedio(ventas) {
     let total = 0;
     let contador = 0;
-
     for (const venta of ventas) {
         if (venta.cantidad > 0) {
             total += valorVenta(venta);
             contador++;
         }
     }
-
     if (contador === 0) {
         return 0;
     }
-
     return total / contador;
 }
 
@@ -75,15 +65,12 @@ function ticketPromedio(ventas) {
 function ventasPorCiudad(ventas, ciudad) {
     let total = 0;
     const ciudadBuscada = ciudad.trim().toLowerCase();
-
     for (const venta of ventas) {
         const ciudadVenta = venta.ciudad.trim().toLowerCase();
-
         if (ciudadVenta === ciudadBuscada && venta.cantidad > 0) {
             total += valorVenta(venta);
         }
     }
-
     return total;
 }
 
@@ -111,7 +98,6 @@ function unidadesVendidasM(ventas) {
 // Calcula las ventas de una ciudad usando métodos
 function ventasPorCiudadM(ventas, ciudad) {
     const ciudadBuscada = ciudad.trim().toLowerCase();
-
     return ventas
         .filter(venta =>
             venta.cantidad > 0 &&
@@ -127,20 +113,16 @@ function totalPorCiudad(ventas) {
         .filter(venta => venta.cantidad > 0)
         .reduce((acumulador, venta) => {
             const ciudad = venta.ciudad.trim();
-
             const ciudadNormalizada =
                 ciudad.charAt(0).toUpperCase() +
                 ciudad.slice(1).toLowerCase();
-
             if (!acumulador[ciudadNormalizada]) {
                 acumulador[ciudadNormalizada] = 0;
             }
-
             acumulador[ciudadNormalizada] += valorVenta(venta);
-
             return acumulador;
         }, {});
-}
+} ////////AQUÍ VAMOSSSSSS
 
 // Agrupa las unidades vendidas por producto
 function unidadesPorProducto(ventas) {
@@ -148,13 +130,10 @@ function unidadesPorProducto(ventas) {
         .filter(venta => venta.cantidad > 0)
         .reduce((acumulador, venta) => {
             const producto = venta.producto;
-
             if (!acumulador[producto]) {
                 acumulador[producto] = 0;
             }
-
             acumulador[producto] += venta.cantidad;
-
             return acumulador;
         }, {});
 }
@@ -219,6 +198,18 @@ function ventasDelDia(ventas, fecha) {
     };
 }
 
+// FUNCIONES INSTRUMENTADAS DÍA 2
+
+function totalVendidoInstrumentada(ventas, contador) {
+    let total = 0;
+    for (const v of ventas) {
+        contador.ops++;
+            total += valorVenta(v);
+        }
+    return total;
+}
+
+
 // ==========================================
 // EXPORTACIÓN DE FUNCIONES
 // ==========================================
@@ -242,4 +233,8 @@ module.exports = {
 
     // MiniReto 4
     ventasDelDia
+
+    //Día 2
+    //MiniReto 2
+    totalVendidoInstrumentada
 };

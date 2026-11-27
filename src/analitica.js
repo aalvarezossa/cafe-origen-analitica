@@ -531,6 +531,138 @@ function primerClienteUnico(ventas) {
     return null;
 }
 
+//MiniReto 11
+// Encuentra la mejor semana sumando cada bloque desde cero
+function mejorSemanaBruta(dias, k) {
+
+    // Validamos que exista una ventana válida
+    if (k <= 0 || k > dias.length) {
+        return null;
+    }
+
+    let mejorTotal = -Infinity;
+    let mejorInicio = 0;
+
+    // Recorremos todas las posiciones donde puede iniciar una semana
+    for (let i = 0; i <= dias.length - k; i++) {
+
+        let total = 0;
+
+        // Sumamos nuevamente los k días de esa semana
+        for (let j = i; j < i + k; j++) {
+            total += dias[j];
+        }
+
+        // Comparamos el total encontrado con el máximo actual
+        if (total > mejorTotal) {
+            mejorTotal = total;
+            mejorInicio = i;
+        }
+    }
+
+    return {
+        total: mejorTotal,
+        diaInicio: mejorInicio + 1
+    };
+}
+
+// Encuentra la mejor semana utilizando ventana deslizante
+function mejorSemana(dias, k) {
+
+    // Validamos que exista una ventana válida
+    if (k <= 0 || k > dias.length) {
+        return null;
+    }
+
+    // Calculamos el total de la primera ventana
+    let totalActual = 0;
+
+    for (let i = 0; i < k; i++) {
+        totalActual += dias[i];
+    }
+
+    // Inicializamos el mejor resultado con la primera semana
+    let mejorTotal = totalActual;
+    let mejorInicio = 0;
+
+    // Desplazamos la ventana por los días restantes
+    for (let i = k; i < dias.length; i++) {
+
+        // Agregamos el día que entra
+        totalActual += dias[i];
+
+        // Restamos el día que sale
+        totalActual -= dias[i - k];
+
+        // Comparamos el nuevo total con el máximo
+        if (totalActual > mejorTotal) {
+            mejorTotal = totalActual;
+            mejorInicio = i - k + 1;
+        }
+    }
+
+    return {
+        total: mejorTotal,
+        diaInicio: mejorInicio + 1
+    };
+}
+
+// Encuentra dos productos cuya suma sea lo más cercana posible
+// al presupuesto sin superarlo
+function parMasCercano(precios, presupuesto) {
+
+    // Creamos una copia ordenada para no modificar el catálogo original
+    const ordenados = [...precios].sort(
+        (a, b) => a.precio - b.precio
+    );
+
+    // Puntero al producto más económico
+    let izquierda = 0;
+
+    // Puntero al producto más costoso
+    let derecha = ordenados.length - 1;
+
+    // Guarda la mejor combinación encontrada
+    let mejorPar = null;
+    let mejorSuma = -Infinity;
+
+    // Movemos los punteros hasta que se crucen
+    while (izquierda < derecha) {
+
+        const suma =
+            ordenados[izquierda].precio +
+            ordenados[derecha].precio;
+
+        // Si no supera el presupuesto, es una combinación válida
+        if (suma <= presupuesto) {
+
+            // Comprobamos si es mejor que la combinación anterior
+            if (suma > mejorSuma) {
+                mejorSuma = suma;
+
+                mejorPar = {
+                    productos: [
+                        ordenados[izquierda],
+                        ordenados[derecha]
+                    ],
+                    total: suma
+                };
+            }
+
+            // Buscamos una combinación de mayor valor
+            izquierda++;
+
+        } else {
+
+            // La suma supera el presupuesto.
+            // Reducimos el valor moviendo el puntero derecho.
+            derecha--;
+        }
+    }
+
+    return mejorPar;
+}
+
 // ==========================================
 // EXPORTACIÓN DE FUNCIONES
 // ==========================================
@@ -577,5 +709,10 @@ module.exports = {
     comboRegalo,
     comboRegaloMap,
     productoEstrellaPorCiudad,
-    primerClienteUnico
+    primerClienteUnico,
+
+    //MiniReto 11
+    mejorSemanaBruta,
+    mejorSemana,
+    parMasCercano
 };

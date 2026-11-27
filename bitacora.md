@@ -770,3 +770,128 @@ En la búsqueda de combinaciones, se reemplazaron las comparaciones de pares por
 En los reportes comerciales, se utilizaron conteos por clave para identificar los productos más frecuentes y los clientes que realizaron una sola compra.
 
 Estas soluciones ofrecen un crecimiento temporal esperado lineal y utilizan memoria adicional proporcional a la información almacenada.
+
+### MiniReto 11:
+VENTANA 1
+[D1] [D2] [D3] [D4] [D5] [D6] [D7]  D8  D9
+ 320  410  280  390  510  620  700
+Total: 3.230
+
+VENTANA 2
+ D1  [D2] [D3] [D4] [D5] [D6] [D7] [D8]  D9
+     410  280  390  510  620  700  300
+Total: 3.210
+
+VENTANA 3
+ D1  D2  [D3] [D4] [D5] [D6] [D7] [D8] [D9]
+         280  390  510  620  700  300  290
+Total: 3.090
+
+## MiniReto: Ventana deslizante y dos punteros
+
+### 1. Mejor semana de ventas
+
+Se implementaron dos funciones para encontrar el período de siete días consecutivos con mayor total de ventas.
+
+**Solución por fuerza bruta: `mejorSemanaBruta(dias, k)`**
+
+Utiliza dos ciclos. El primero selecciona el inicio de cada ventana y el segundo suma nuevamente los k días correspondientes.
+
+- Complejidad temporal: O(n × k).
+- Complejidad espacial: O(1).
+
+**Solución optimizada: `mejorSemana(dias, k)`**
+
+Utiliza una ventana deslizante. Primero calcula el total de los primeros k días. Después, para avanzar, suma el día que entra y resta el día que sale.
+
+- Complejidad temporal: O(n).
+- Complejidad espacial: O(1).
+
+### 2. Traza de las primeras tres ventanas
+
+Se utilizaron los datos de septiembre con k = 7.
+
+**Primera ventana: días 1 al 7**
+
+320 + 410 + 280 + 390 + 510 + 620 + 700 = 3.230.
+
+**Segunda ventana: días 2 al 8**
+
+3.230 + 300 - 320 = 3.210.
+
+**Tercera ventana: días 3 al 9**
+
+3.210 + 290 - 410 = 3.090.
+
+Los valores están expresados en miles de pesos.
+
+### 3. Resultado de septiembre
+
+La mejor semana comienza el día 24 y termina el día 30.
+
+Total: 3.670 miles de pesos ($3.670.000).
+
+### 4. Verificación y mediciones
+
+Se compararon las dos implementaciones con los datos de septiembre y con 100.000 días generados aleatoriamente.
+
+| Conjunto de datos | Resultado coincidente |
+|---|---|
+| Septiembre, 30 días | [Completar después de ejecutar] |
+| 100.000 días generados | [Completar después de ejecutar] |
+
+**Tiempos medidos con 100.000 días:**
+
+- Fuerza bruta: [Completar] ms.
+- Ventana deslizante: [Completar] ms.
+
+La comparación permite observar el ahorro de trabajo de la ventana deslizante, que evita volver a sumar los días que permanecen dentro de cada ventana.
+
+### 5. Par de productos más cercano al presupuesto
+
+Se implementó `parMasCercano(precios, presupuesto)` utilizando dos punteros sobre una copia del catálogo ordenada de menor a mayor precio.
+
+El puntero izquierdo comienza en el producto más económico y el derecho en el más costoso.
+
+- Si la suma supera el presupuesto, se mueve el puntero derecho hacia la izquierda.
+- Si la suma no supera el presupuesto, se guarda la combinación cuando mejora el resultado y se mueve el puntero izquierdo hacia la derecha.
+
+### 6. Traza para un presupuesto de $100.000
+
+| Paso | Producto izquierdo | Producto derecho | Suma | Acción |
+|---:|---|---|---:|---|
+| 1 | Filtros (18.000) | Molino (120.000) | 138.000 | Mover derecha |
+| 2 | Filtros (18.000) | Prensa (95.000) | 113.000 | Mover derecha |
+| 3 | Filtros (18.000) | Huila 1 kg (79.000) | 97.000 | Guardar y mover izquierda |
+| 4 | Nariño (26.000) | Huila 1 kg (79.000) | 105.000 | Mover derecha |
+| 5 | Nariño (26.000) | Sierra (45.000) | 71.000 | Guardar y mover izquierda |
+| 6 | Taza (35.000) | Sierra (45.000) | 80.000 | Guardar y mover izquierda |
+| 7 | Huila 500 g (42.000) | Sierra (45.000) | 87.000 | Guardar y mover izquierda |
+
+La mejor combinación encontrada es Filtros de papel x100 y Origen Huila 1 kg, con un total de $97.000.
+
+### 7. Pruebas de presupuesto
+
+| Presupuesto | Resultado esperado |
+|---:|---|
+| $100.000 | Combinación de $97.000 |
+| $140.000 | Combinación de $140.000 |
+| $40.000 | Sin combinación posible |
+
+### 8. Complejidad
+
+| Función | Tiempo | Espacio |
+|---|---|---|
+| `mejorSemanaBruta` | O(n × k) | O(1) |
+| `mejorSemana` | O(n) | O(1) |
+| `parMasCercano` | O(n log n) | O(n) |
+
+En `parMasCercano`, el recorrido con dos punteros es O(n), pero el ordenamiento previo cuesta O(n log n). Por eso la complejidad total es O(n log n).
+
+### 9. Conclusión
+
+La ventana deslizante permite reutilizar los resultados de una ventana anterior y evitar sumas repetidas. Esto reduce el tiempo de O(n × k) a O(n).
+
+La técnica de dos punteros permite encontrar una pareja de productos adecuada sin comparar todas las combinaciones posibles. Sin embargo, requiere ordenar primero los precios, por lo que su complejidad total es O(n log n).
+
+Ambas técnicas permiten resolver problemas comerciales de forma más eficiente y con un uso controlado de memoria.

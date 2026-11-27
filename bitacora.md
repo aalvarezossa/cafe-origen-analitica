@@ -542,3 +542,149 @@ Se conservará `totalCiudadUnaPasada` en el motor porque permite obtener el mism
 Aunque la versión encadenada es más fácil de leer, la versión de una pasada utiliza menos memoria adicional. Esta característica es importante cuando la plataforma procesa grandes cantidades de ventas y cuenta con recursos de memoria limitados.
 
 La decisión prioriza el aprovechamiento de recursos sin cambiar el resultado esperado.
+
+## Optimización: clientes recurrentes con Set y Map
+
+### 1. Entender el problema
+
+**Entrada:** arreglo de ventas con identificadores de clientes.
+
+**Salida:** arreglo de clientes que realizaron más de una compra.
+
+**Restricciones:** no modificar los datos originales y devolver cada cliente recurrente una sola vez.
+
+### 2. Casos de prueba
+
+- Arreglo vacío: devuelve `[]`.
+- Una venta: devuelve `[]`.
+- Clientes diferentes: devuelve `[]`.
+- Un cliente con varias compras: aparece una sola vez en el resultado.
+- Varios clientes recurrentes: todos deben aparecer una sola vez.
+
+### 3. Solución inicial: fuerza bruta
+
+La primera implementación compara cada venta con las siguientes mediante dos ciclos anidados.
+
+Además, utiliza `includes()` para comprobar si un cliente recurrente ya fue registrado.
+
+Las comparaciones entre pares tienen complejidad O(n²). En el peor caso, las búsquedas adicionales con `includes()` pueden elevar la complejidad temporal a O(n³).
+
+La memoria adicional es O(n), debido al arreglo de clientes recurrentes.
+
+### 4. Idea de optimización
+
+Se utilizaron las estructuras `Set` y `Map` para evitar búsquedas repetidas.
+
+**Versión Set:**
+- `vistos` almacena los clientes que ya aparecieron.
+- `recurrentes` almacena los clientes que aparecen más de una vez.
+- Cada venta se procesa una sola vez.
+
+Complejidad temporal esperada: O(n).
+
+Complejidad espacial: O(n).
+
+**Versión Map:**
+- `comprasPorCliente` cuenta las compras de cada cliente.
+- `clientesRecurrentesMap` obtiene los clientes cuya cantidad de compras es mayor que uno.
+
+Complejidad temporal esperada: O(n).
+
+Complejidad espacial: O(n).
+
+### 5. Verificación
+
+Se compararon las tres implementaciones con:
+- Las 12 ventas originales del Día 1.
+- 5.000 ventas generadas.
+
+Los resultados se ordenaron antes de compararlos para evitar diferencias causadas únicamente por el orden de aparición.
+
+**Resultado de la prueba con los datos del Día 1:** 
+Original: [ 'C01', 'C02', 'C03' ]
+Set: [ 'C01', 'C02', 'C03' ]
+Map: [ 'C01', 'C02', 'C03' ]
+¿Las tres versiones coinciden? true.
+
+**Resultado de la prueba con 5.000 ventas:**
+Original: [
+  'C01',   'C04',   'C05',   'C06',   'C07',   'C08',   'C09',
+  'C10',   'C1001', 'C1003', 'C1004', 'C1005', 'C1006', 'C1007',
+  'C1009', 'C101',  'C1010', 'C1011', 'C1012', 'C1013', 'C1014',
+  'C1015', 'C1016', 'C1019', 'C102',  'C1020', 'C1021', 'C1022',
+  'C1023', 'C1024', 'C1025', 'C1026', 'C1027', 'C1028', 'C1029',
+  'C103',  'C1030', 'C1031', 'C1032', 'C1033', 'C1036', 'C1037',
+  'C1038', 'C1039', 'C104',  'C1040', 'C1042', 'C1043', 'C1044',
+  'C1046', 'C1047', 'C1048', 'C105',  'C1050', 'C1052', 'C1053',
+  'C1054', 'C1055', 'C1056', 'C1057', 'C1058', 'C1059', 'C106',
+  'C1061', 'C1062', 'C1063', 'C1064', 'C1066', 'C1067', 'C1068',
+  'C1069', 'C107',  'C1071', 'C1072', 'C1075', 'C1076', 'C1077',
+  'C1078', 'C1079', 'C1080', 'C1081', 'C1082', 'C1083', 'C1084',
+  'C1085', 'C1086', 'C1087', 'C1088', 'C1089', 'C109',  'C1090',
+  'C1092', 'C1093', 'C1094', 'C1096', 'C1097', 'C1099', 'C1100',
+  'C1101', 'C1102',
+  ... 1240 more items
+]
+Set: [
+  'C01',   'C04',   'C05',   'C06',   'C07',   'C08',   'C09',
+  'C10',   'C1001', 'C1003', 'C1004', 'C1005', 'C1006', 'C1007',
+  'C1009', 'C101',  'C1010', 'C1011', 'C1012', 'C1013', 'C1014',
+  'C1015', 'C1016', 'C1019', 'C102',  'C1020', 'C1021', 'C1022',
+  'C1023', 'C1024', 'C1025', 'C1026', 'C1027', 'C1028', 'C1029',
+  'C103',  'C1030', 'C1031', 'C1032', 'C1033', 'C1036', 'C1037',
+  'C1038', 'C1039', 'C104',  'C1040', 'C1042', 'C1043', 'C1044',
+  'C1046', 'C1047', 'C1048', 'C105',  'C1050', 'C1052', 'C1053',
+  'C1054', 'C1055', 'C1056', 'C1057', 'C1058', 'C1059', 'C106',
+  'C1061', 'C1062', 'C1063', 'C1064', 'C1066', 'C1067', 'C1068',
+  'C1069', 'C107',  'C1071', 'C1072', 'C1075', 'C1076', 'C1077',
+  'C1078', 'C1079', 'C1080', 'C1081', 'C1082', 'C1083', 'C1084',
+  'C1085', 'C1086', 'C1087', 'C1088', 'C1089', 'C109',  'C1090',
+  'C1092', 'C1093', 'C1094', 'C1096', 'C1097', 'C1099', 'C1100',
+  'C1101', 'C1102',
+  ... 1240 more items
+]
+Map: [
+  'C01',   'C04',   'C05',   'C06',   'C07',   'C08',   'C09',
+  'C10',   'C1001', 'C1003', 'C1004', 'C1005', 'C1006', 'C1007',
+  'C1009', 'C101',  'C1010', 'C1011', 'C1012', 'C1013', 'C1014',
+  'C1015', 'C1016', 'C1019', 'C102',  'C1020', 'C1021', 'C1022',
+  'C1023', 'C1024', 'C1025', 'C1026', 'C1027', 'C1028', 'C1029',
+  'C103',  'C1030', 'C1031', 'C1032', 'C1033', 'C1036', 'C1037',
+  'C1038', 'C1039', 'C104',  'C1040', 'C1042', 'C1043', 'C1044',
+  'C1046', 'C1047', 'C1048', 'C105',  'C1050', 'C1052', 'C1053',
+  'C1054', 'C1055', 'C1056', 'C1057', 'C1058', 'C1059', 'C106',
+  'C1061', 'C1062', 'C1063', 'C1064', 'C1066', 'C1067', 'C1068',
+  'C1069', 'C107',  'C1071', 'C1072', 'C1075', 'C1076', 'C1077',
+  'C1078', 'C1079', 'C1080', 'C1081', 'C1082', 'C1083', 'C1084',
+  'C1085', 'C1086', 'C1087', 'C1088', 'C1089', 'C109',  'C1090',
+  'C1092', 'C1093', 'C1094', 'C1096', 'C1097', 'C1099', 'C1100',
+  'C1101', 'C1102',
+  ... 1240 more items
+]
+¿Las tres versiones coinciden? true
+
+### 6. Mediciones
+
+| Cantidad de ventas | Original (ms) | Set (ms) | Map (ms) |
+|---:|---:|---:|---:|
+| 1.000 | [4.557] | [0.151] | [0.311] |
+| 10.000 | No ejecutada | [2.143] | [2.102] |
+| 100.000 | No ejecutada | [16.895] | [21.407] |
+
+### 7. Intercambio entre tiempo y memoria
+
+La solución original utiliza búsquedas repetidas y comparaciones entre pares, lo que aumenta considerablemente el tiempo de ejecución.
+
+Las soluciones con `Set` y `Map` reducen ese trabajo al procesar las ventas una sola vez y consultar estructuras de búsqueda.
+
+La mejora en tiempo tiene un costo: ambas soluciones necesitan memoria adicional para almacenar clientes y cantidades.
+
+Por lo tanto, se cambia un mayor consumo de memoria, proporcional a la cantidad de clientes, por una reducción importante del tiempo de procesamiento.
+
+### 8. Conclusión
+
+Se propone utilizar la versión con `Set` para identificar clientes recurrentes porque resuelve directamente el problema con un único recorrido y permite mantener separados los clientes vistos y los recurrentes.
+
+La versión con `Map` también resulta útil porque permite conocer cuántas compras realizó cada cliente, información que puede aprovecharse en futuros reportes del marketplace.
+
+La elección definitiva debe respaldarse con las mediciones obtenidas y las necesidades de los reportes.

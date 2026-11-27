@@ -297,6 +297,48 @@ function clientesRecurrentes(ventas) {
     return recurrentes;
 }
 
+// Identifica clientes recurrentes utilizando Set
+function clientesRecurrentesSet(ventas) {
+    // Guarda los clientes que ya hemos encontrado
+    const vistos = new Set();
+
+    // Guarda los clientes que aparecen más de una vez
+    const recurrentes = new Set();
+
+    // Recorremos las ventas una sola vez
+    for (const venta of ventas) {
+        const cliente = venta.cliente;
+
+        // Si el cliente ya estaba en vistos, es recurrente
+        if (vistos.has(cliente)) {
+            recurrentes.add(cliente);
+        } else {
+            // Si es la primera vez, lo guardamos
+            vistos.add(cliente);
+        }
+    }
+
+    // Convertimos el Set en un arreglo para devolver el resultado
+    return [...recurrentes];
+}
+
+// Cuenta cuántas compras realizó cada cliente
+function comprasPorCliente(ventas) {
+    const compras = new Map();
+
+    for (const venta of ventas) {
+        const cliente = venta.cliente;
+
+        // Obtenemos la cantidad de compras que tiene el cliente
+        const cantidadActual = compras.get(cliente) || 0;
+
+        // Guardamos la cantidad actualizada
+        compras.set(cliente, cantidadActual + 1);
+    }
+
+    return compras;
+}
+
 //MINIRETO 7: TIEMPO, MEMORIA Y CADENAS DE MÉTODOS
 // Versión 1: utiliza métodos encadenados
 function totalCiudadCadena(ventas, ciudad) {
@@ -321,6 +363,19 @@ function totalCiudadCadena(ventas, ciudad) {
     return total;
 }
 
+// Obtiene los clientes que realizaron más de una compra
+function clientesRecurrentesMap(ventas) {
+    const compras = comprasPorCliente(ventas);
+    const recurrentes = [];
+
+    for (const [cliente, cantidad] of compras) {
+        if (cantidad > 1) {
+            recurrentes.push(cliente);
+        }
+    }
+
+    return recurrentes;
+}
 
 // Versión 2: utiliza un solo ciclo
 function totalCiudadUnaPasada(ventas, ciudad) {
@@ -373,5 +428,10 @@ module.exports = {
 
     //MiniReto 7
     totalCiudadCadena,
-    totalCiudadUnaPasada
+    totalCiudadUnaPasada,
+
+    //MiniReto 9
+    clientesRecurrentesSet,
+    comprasPorCliente,
+    clientesRecurrentesMap
 };

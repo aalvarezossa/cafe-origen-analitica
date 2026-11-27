@@ -487,3 +487,58 @@ considerablemente el trabajo realizado por el algoritmo.
 ### Conclusión
 
 El reporte de clientes recurrentes se vuelve lento porque, a medida que aumenta el historial de ventas, el sistema necesita realizar muchas más comparaciones entre clientes. Además, debe buscar si cada cliente repetido ya fue registrado. Esto hace que el tiempo de procesamiento crezca considerablemente. Para historiales grandes, será necesario optimizar la forma en que identificamos los clientes recurrentes.
+
+## MiniReto 7: Complejidad espacial
+
+### 1. Comparación de implementaciones
+
+Se desarrollaron dos funciones para calcular el total vendido por ciudad.
+
+- `totalCiudadCadena`: utiliza dos métodos `map`, un `filter` y un `reduce`.
+- `totalCiudadUnaPasada`: utiliza un único ciclo `for` y un acumulador.
+
+Ambas funciones deben devolver el mismo resultado para las mismas ventas y ciudad.
+
+### 2. Recorridos y arreglos creados
+
+**Versión encadenada:**
+- Realiza cuatro recorridos completos como máximo.
+- Crea tres arreglos intermedios.
+- Su complejidad temporal es O(n).
+- Su complejidad espacial es O(n).
+
+**Versión de una pasada:**
+- Realiza un único recorrido.
+- No crea arreglos intermedios.
+- Su complejidad temporal es O(n).
+- Su complejidad espacial adicional es O(1).
+
+### 3. Análisis temporal
+
+Aunque la versión encadenada realiza cuatro recorridos, su complejidad temporal sigue siendo O(n).
+
+Esto sucede porque Big O elimina las constantes. Por lo tanto, O(4n) se simplifica a O(n).
+
+La versión de una pasada también es O(n), pero realiza menos trabajo al recorrer los datos una sola vez.
+
+### 4. Análisis espacial
+
+La versión encadenada necesita memoria adicional para almacenar los arreglos que generan los métodos `map` y `filter`.
+
+La versión de una pasada solamente utiliza variables temporales y un acumulador, por lo que su memoria adicional es constante.
+
+### 5. Clasificación de las funciones del motor
+
+Las funciones que trabajan con acumuladores y variables temporales, sin crear estructuras adicionales proporcionales a las ventas, tienen complejidad espacial O(1).
+
+Las funciones que crean arreglos, agrupaciones o estructuras que almacenan resultados tienen complejidad espacial O(n) en el peor caso.
+
+Se debe prestar especial atención a `totalPorCiudad`, que utiliza `filter`, y a `topProductosPorValor`, que necesita almacenar y ordenar información de los productos.
+
+### 6. Decisión técnica
+
+Se conservará `totalCiudadUnaPasada` en el motor porque permite obtener el mismo resultado con un solo recorrido y sin crear arreglos intermedios.
+
+Aunque la versión encadenada es más fácil de leer, la versión de una pasada utiliza menos memoria adicional. Esta característica es importante cuando la plataforma procesa grandes cantidades de ventas y cuenta con recursos de memoria limitados.
+
+La decisión prioriza el aprovechamiento de recursos sin cambiar el resultado esperado.

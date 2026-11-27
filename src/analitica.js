@@ -297,6 +297,47 @@ function clientesRecurrentes(ventas) {
     return recurrentes;
 }
 
+//MINIRETO 7: TIEMPO, MEMORIA Y CADENAS DE MÉTODOS
+// Versión 1: utiliza métodos encadenados
+function totalCiudadCadena(ventas, ciudad) {
+    const ciudadBuscada = ciudad.trim().toLowerCase();
+
+    const ventasNormalizadas = ventas.map(venta => ({
+        ...venta,
+        ciudad: venta.ciudad.trim().toLowerCase()
+    }));
+
+    const ventasFiltradas = ventasNormalizadas.filter(
+        venta => venta.ciudad === ciudadBuscada
+    );
+
+    const valores = ventasFiltradas.map(venta => valorVenta(venta));
+
+    const total = valores.reduce(
+        (acumulado, valor) => acumulado + valor,
+        0
+    );
+
+    return total;
+}
+
+
+// Versión 2: utiliza un solo ciclo
+function totalCiudadUnaPasada(ventas, ciudad) {
+    const ciudadBuscada = ciudad.trim().toLowerCase();
+    let total = 0;
+
+    for (let i = 0; i < ventas.length; i++) {
+        const ciudadActual = ventas[i].ciudad.trim().toLowerCase();
+
+        if (ciudadActual === ciudadBuscada) {
+            total += valorVenta(ventas[i]);
+        }
+    }
+
+    return total;
+}
+
 // ==========================================
 // EXPORTACIÓN DE FUNCIONES
 // ==========================================
@@ -328,5 +369,9 @@ module.exports = {
     primeraVenta,
 
     //MiniReto 6
-    clientesRecurrentes
+    clientesRecurrentes,
+
+    //MiniReto 7
+    totalCiudadCadena,
+    totalCiudadUnaPasada
 };

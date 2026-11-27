@@ -393,6 +393,144 @@ function totalCiudadUnaPasada(ventas, ciudad) {
     return total;
 }
 
+//DÍA 3
+
+//MiniReto 10:
+// Busca dos productos que sumen el valor de la tarjeta
+// utilizando fuerza bruta
+function comboRegalo(catalogo, valor) {
+
+    // Primer ciclo: selecciona el primer producto
+    for (let i = 0; i < catalogo.length; i++) {
+
+        // Segundo ciclo: selecciona el segundo producto
+        for (let j = i + 1; j < catalogo.length; j++) {
+
+            const suma = catalogo[i].precio + catalogo[j].precio;
+
+            if (suma === valor) {
+                return [catalogo[i], catalogo[j]];
+            }
+        }
+    }
+
+    return null;
+}
+
+// Busca dos productos que sumen el valor de la tarjeta
+// utilizando Map
+function comboRegaloMap(catalogo, valor) {
+
+    // Guarda los precios que ya hemos encontrado
+    const preciosVistos = new Map();
+
+    // Recorremos el catálogo una sola vez
+    for (const producto of catalogo) {
+
+        // Calculamos cuánto falta para completar la tarjeta
+        const complemento = valor - producto.precio;
+
+        // Preguntamos si ese complemento ya apareció
+        if (preciosVistos.has(complemento)) {
+
+            // Recuperamos el producto que tenía ese precio
+            const productoEncontrado = preciosVistos.get(complemento);
+
+            return [productoEncontrado, producto];
+        }
+
+        // Guardamos el producto actual utilizando su precio como clave
+        preciosVistos.set(producto.precio, producto);
+    }
+
+    // Si terminamos el recorrido sin encontrar pareja
+    return null;
+}
+
+// Encuentra el producto más vendido de cada ciudad
+function productoEstrellaPorCiudad(ventas) {
+
+    // Aquí guardaremos las ciudades y sus productos
+    const conteoCiudades = new Map();
+
+    // Primer recorrido: contamos las apariciones
+    for (const venta of ventas) {
+
+        const ciudad = venta.ciudad;
+        const producto = venta.producto;
+
+        // Si la ciudad todavía no existe, creamos su Map
+        if (!conteoCiudades.has(ciudad)) {
+            conteoCiudades.set(ciudad, new Map());
+        }
+
+        // Recuperamos el Map de productos de esa ciudad
+        const conteoProductos = conteoCiudades.get(ciudad);
+
+        // Obtenemos las apariciones actuales del producto
+        const cantidadActual = conteoProductos.get(producto) || 0;
+
+        // Aumentamos su contador
+        conteoProductos.set(producto, cantidadActual + 1);
+    }
+
+    // Aquí guardaremos el producto estrella de cada ciudad
+    const resultados = [];
+
+    // Segundo recorrido: encontramos el producto más frecuente
+    for (const [ciudad, productos] of conteoCiudades) {
+
+        let productoEstrella = null;
+        let mayorCantidad = 0;
+
+        for (const [producto, cantidad] of productos) {
+
+            if (cantidad > mayorCantidad) {
+                mayorCantidad = cantidad;
+                productoEstrella = producto;
+            }
+        }
+
+        resultados.push({
+            ciudad,
+            producto: productoEstrella,
+            apariciones: mayorCantidad
+        });
+    }
+
+    return resultados;
+}
+
+// Encuentra el primer cliente que compró una sola vez
+function primerClienteUnico(ventas) {
+
+    // Guardamos cuántas compras realizó cada cliente
+    const comprasPorCliente = new Map();
+
+    // Primer recorrido: contamos las compras
+    for (const venta of ventas) {
+
+        const cliente = venta.cliente;
+
+        const cantidadActual = comprasPorCliente.get(cliente) || 0;
+
+        comprasPorCliente.set(cliente, cantidadActual + 1);
+    }
+
+    // Segundo recorrido: buscamos al primer cliente con una compra
+    for (const venta of ventas) {
+
+        const cliente = venta.cliente;
+
+        if (comprasPorCliente.get(cliente) === 1) {
+            return cliente;
+        }
+    }
+
+    // Si todos compraron más de una vez
+    return null;
+}
+
 // ==========================================
 // EXPORTACIÓN DE FUNCIONES
 // ==========================================
@@ -433,5 +571,11 @@ module.exports = {
     //MiniReto 9
     clientesRecurrentesSet,
     comprasPorCliente,
-    clientesRecurrentesMap
+    clientesRecurrentesMap,
+
+    //MiniReto 10
+    comboRegalo,
+    comboRegaloMap,
+    productoEstrellaPorCiudad,
+    primerClienteUnico
 };

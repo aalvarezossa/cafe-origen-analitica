@@ -688,3 +688,85 @@ Se propone utilizar la versión con `Set` para identificar clientes recurrentes 
 La versión con `Map` también resulta útil porque permite conocer cuántas compras realizó cada cliente, información que puede aprovecharse en futuros reportes del marketplace.
 
 La elección definitiva debe respaldarse con las mediciones obtenidas y las necesidades de los reportes.
+
+## MiniReto: Complementos y conteo de frecuencias
+
+### 1. Combinación de productos
+
+Se creó un catálogo de ocho productos con sus respectivos precios.
+
+Se implementaron dos soluciones para encontrar dos productos distintos cuyo precio sumara el valor de una tarjeta regalo.
+
+**Fuerza bruta:**
+
+Se utilizaron dos ciclos anidados para comparar los precios de todos los pares posibles.
+
+Complejidad temporal: O(n²).
+
+Complejidad espacial: O(1).
+
+**Versión optimizada con Map:**
+
+Se almacenaron los precios ya revisados. Para cada producto se calculó el complemento necesario y se consultó si ya estaba registrado en el Map.
+
+Complejidad temporal esperada: O(n).
+
+Complejidad espacial: O(n).
+
+### 2. Pruebas de tarjetas regalo
+
+| Valor | Resultado esperado |
+|---:|---|
+| $87.000 | Origen Huila 500 g + Origen Sierra 500 g |
+| $61.000 | Origen Nariño 250 g + Taza de cerámica |
+| $50.000 | Sin combinación (`null`) |
+
+### 3. Traza de la versión optimizada para $87.000
+
+| Paso | Producto actual | Precio | Complemento | ¿Está en el Map? |
+|---:|---|---:|---:|---|
+| 1 | Origen Nariño 250 g | 26.000 | 61.000 | No |
+| 2 | Origen Huila 500 g | 42.000 | 45.000 | No |
+| 3 | Origen Sierra 500 g | 45.000 | 42.000 | Sí |
+
+En el tercer paso se encuentra el precio de $42.000, correspondiente a Origen Huila 500 g.
+
+Por lo tanto, se devuelve la combinación de Origen Huila 500 g y Origen Sierra 500 g.
+
+### 4. Producto estrella por ciudad
+
+Se implementó `productoEstrellaPorCiudad(ventas)` mediante Map anidados.
+
+El primer Map organiza la información por ciudad y el segundo cuenta las apariciones de cada producto.
+
+La función devuelve el producto con mayor frecuencia en cada ciudad.
+
+Complejidad temporal esperada: O(n).
+
+Complejidad espacial: O(n).
+
+En caso de empate se conserva el producto que apareció primero en el historial.
+
+### 5. Primer cliente con una sola compra
+
+Se implementó `primerClienteUnico(ventas)` mediante dos recorridos y un Map.
+
+En el primer recorrido se cuenta cuántas compras realizó cada cliente.
+
+En el segundo se revisan las ventas en su orden original y se devuelve el primer cliente cuyo conteo sea igual a uno.
+
+Complejidad temporal esperada: O(n).
+
+Complejidad espacial: O(n).
+
+Si ningún cliente realizó exactamente una compra, la función devuelve `null`.
+
+### 6. Conclusión
+
+Las estructuras Map permiten resolver problemas de búsqueda y conteo sin tener que comparar repetidamente todos los elementos.
+
+En la búsqueda de combinaciones, se reemplazaron las comparaciones de pares por consultas de complementos.
+
+En los reportes comerciales, se utilizaron conteos por clave para identificar los productos más frecuentes y los clientes que realizaron una sola compra.
+
+Estas soluciones ofrecen un crecimiento temporal esperado lineal y utilizan memoria adicional proporcional a la información almacenada.

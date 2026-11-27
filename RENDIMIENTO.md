@@ -135,3 +135,25 @@ Sin embargo, existen funciones que requieren atención. La identificación de cl
 También se deben controlar las funciones que generan arreglos intermedios o estructuras de agrupación, debido a que el consumo de memoria puede aumentar con el volumen de información.
 
 La siguiente etapa debe priorizar la optimización de `clientesRecurrentes`, validar las mejoras mediante mediciones y repetir las pruebas con diferentes tamaños de entrada.
+
+    Comparación v0.1 vs. v1.0 (Mediciones reales)
+
+| Volumen | Tiempo v0.1 (ms) | Tiempo v1.0 (ms) | Mejora | ¿Cumple < 5 s? |
+|---:|---:|---:|---:|:---:|
+| 10.000 ventas | [Completar v0.1 10k] | [Completar v1.0 10k] | [Completar] | Sí |
+| 100.000 ventas | [Completar v0.1 100k] | [Completar v1.0 100k] | [Completar] | Sí |
+
+    Complejidad de funciones nuevas y optimizadas (v1.0)
+
+Ninguna función ejecutada en el reporte final de v1.0 tiene complejidad temporal cuadrática $O(n^2)$ sobre el volumen de ventas.
+
+| Función | Qué hace | Complejidad temporal | Complejidad espacial | Justificación |
+|---|---|---|---|---|
+| totalCiudadUnaPasada | Suma ventas de una ciudad en un solo recorrido | $O(n)$ | $O(1)$ | Un solo ciclo con acumulador, sin arreglos intermedios |
+| clientesRecurrentesSet | Identifica clientes con más de una compra | $O(n)$ | $O(n)$ | Usa Set de vistos y recurrentes en una sola pasada |
+| clientesRecurrentesMap | Obtiene clientes recurrentes desde conteo por cliente | $O(n)$ | $O(n)$ | Conteo en Map y filtro lineal de entradas |
+| productoEstrellaPorCiudad | Obtiene el producto más frecuente en cada ciudad | $O(n)$ | $O(n)$ | Map anidado por ciudad y producto en dos recorridos lineales |
+| comboRegaloMap | Busca dos productos del catálogo que sumen un valor objetivo | $O(m)$ | $O(m)$ | Consulta complementos en Map sobre los $m$ ítems del catálogo |
+| primerClienteUnico | Encuentra el primer cliente con una sola compra | $O(n)$ | $O(n)$ | Cuenta frecuencias en Map y busca el primero con conteo 1 |
+| mejorSemana | Calcula la mayor suma en una ventana de $k$ días | $O(n)$ | $O(1)$ | Ventana deslizante sumando el día que entra y restando el que sale |
+| parMasCercano | Encuentra el par de productos más cercano a un presupuesto sin excederlo | $O(m \log m)$ | $O(m)$ | Ordena copia de $m$ productos y aplica dos punteros |

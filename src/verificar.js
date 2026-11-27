@@ -16,7 +16,9 @@ const {
     unidadesVendidasM,
 
     ventasPorCiudad,
-    ventasPorCiudadM
+    ventasPorCiudadM,
+
+    clientesRecurrentes
 
 } = require("./analitica");
 
@@ -134,3 +136,7 @@ console.table(rankingUnidades);
 console.log("\n===== TOP 3 PRODUCTOS POR VALOR =====");
 
 console.table(topProductosPorValor(ventas, 3));
+
+//Día 2 - MiniReto6
+
+console.log("Clientes recurrentes:", clientesRecurrentes(ventas));

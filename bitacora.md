@@ -440,3 +440,50 @@ Los valores monetarios se presentan en pesos colombianos utilizando toLocaleStri
 ### Día 2
 Predicción antes de medir (nx10):
 Para totalPorCiudadInstrumentada, el número de operaciones se multiplicará aproximadamente por 10, porque el recorrido de filter y reduce escala de forma lineal con la cantidad de registros ($n$) y el trabajo por venta es constante (siempre que se mantenga una proporción similar de ventas con cantidad > 0). Si hay otras funciones en la práctica, su factor dependerá de si son $O(1)$ (factor ~1), $O(n)$ (factor ~10) o $O(n^2)$ (factor ~100).
+
+## MiniReto 6: Clientes recurrentes
+
+### Traza manual
+
+Se utilizaron 5 ventas:
+
+C01, C02, C01, C03, C02.
+
+El algoritmo realizó las siguientes comparaciones:
+
+4 + 3 + 2 + 1 = 10.
+
+Los clientes recurrentes encontrados fueron C01 y C02.
+
+### Generalización
+
+Con n ventas, el número de comparaciones entre pares es:
+
+n * (n - 1) / 2.
+
+Esto representa un crecimiento cuadrático O(n²).
+
+### Mediciones
+
+Tamaño del lote     |	Tiempo de ejecución
+1.000	            |       5.593 ms   
+2.000	            |       14.053 ms
+4.000	            |       54.325 ms
+8.000	            |       209.914 ms
+16.000	            |       790.624 ms
+
+### Costo oculto de includes()
+
+El método includes() busca un elemento dentro del arreglo recurrentes.
+
+Para realizar esta búsqueda puede tener que revisar varios elementos.
+
+Por lo tanto, además de las comparaciones de los ciclos for,
+también debemos considerar el costo de buscar clientes repetidos.
+
+En el peor caso, estas búsquedas pueden incrementar
+considerablemente el trabajo realizado por el algoritmo.
+
+### Conclusión
+
+El reporte de clientes recurrentes se vuelve lento porque, a medida que aumenta el historial de ventas, el sistema necesita realizar muchas más comparaciones entre clientes. Además, debe buscar si cada cliente repetido ya fue registrado. Esto hace que el tiempo de procesamiento crezca considerablemente. Para historiales grandes, será necesario optimizar la forma en que identificamos los clientes recurrentes.

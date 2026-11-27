@@ -202,13 +202,80 @@ function ventasDelDia(ventas, fecha) {
 
 function totalVendidoInstrumentada(ventas, contador) {
     let total = 0;
+
     for (const v of ventas) {
-        contador.ops++;
+        contador.ops++; // Visitar un elemento
+        contador.ops++; // Comparar cantidad
+
+        if (v.cantidad > 0) {
             total += valorVenta(v);
         }
+    }
+
     return total;
 }
 
+function ventaMayorInstrumentada(ventas, contador) {
+    let ventaMaxima = null;
+    let valorMaximo = 0;
+
+    for (const venta of ventas) {
+        contador.ops++; // se visita un elemento de ventas
+
+        contador.ops++; // se evalúa si la venta tiene cantidad válida
+        if (venta.cantidad > 0) {
+            const valorActual = valorVenta(venta);
+
+            contador.ops++; // se compara con el máximo actual
+            if (valorActual > valorMaximo) {
+                valorMaximo = valorActual;
+                ventaMaxima = venta;
+            }
+        }
+    }
+
+    return ventaMaxima;
+}
+
+function totalPorCiudadInstrumentada(ventas, contador) {
+    return ventas
+        .filter(venta => {
+            contador.ops++; // Visitar elemento
+            contador.ops++; // Comparar cantidad
+
+            return venta.cantidad > 0;
+        })
+        .reduce((acumulador, venta) => {
+            contador.ops++; // Visitar elemento en reduce
+            contador.ops++; // Comprobar si la ciudad existe
+
+            const ciudad = venta.ciudad.trim();
+
+            const ciudadNormalizada =
+                ciudad.charAt(0).toUpperCase() +
+                ciudad.slice(1).toLowerCase();
+
+            if (!acumulador[ciudadNormalizada]) {
+                acumulador[ciudadNormalizada] = 0;
+            }
+
+            acumulador[ciudadNormalizada] += valorVenta(venta);
+
+            return acumulador;
+        }, {});
+}
+
+function primeraVenta(ventas, contador) {
+    contador.ops++; // Comparar si existen ventas
+
+    if (ventas.length === 0) {
+        return null;
+    }
+
+    contador.ops++; // Acceder a la primera venta
+
+    return ventas[0];
+}
 
 // ==========================================
 // EXPORTACIÓN DE FUNCIONES
@@ -232,9 +299,11 @@ module.exports = {
     topProductosPorValor,
 
     // MiniReto 4
-    ventasDelDia
+    ventasDelDia,
 
-    //Día 2
-    //MiniReto 2
-    totalVendidoInstrumentada
+    // MiniReto 5
+    totalVendidoInstrumentada,
+    ventaMayorInstrumentada,
+    totalPorCiudadInstrumentada,
+    primeraVenta
 };

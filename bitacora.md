@@ -436,3 +436,7 @@ Los valores monetarios se presentan en pesos colombianos utilizando toLocaleStri
 - Se mantuvo la normalización de ciudades para evitar agrupaciones duplicadas.
 - Se protegió el cálculo del ticket promedio cuando no existen ventas.
 - Se separó la lógica de cálculo de la presentación del reporte.
+
+### Día 2
+Predicción antes de medir (nx10):
+Para totalPorCiudadInstrumentada, el número de operaciones se multiplicará aproximadamente por 10, porque el recorrido de filter y reduce escala de forma lineal con la cantidad de registros ($n$) y el trabajo por venta es constante (siempre que se mantenga una proporción similar de ventas con cantidad > 0). Si hay otras funciones en la práctica, su factor dependerá de si son $O(1)$ (factor ~1), $O(n)$ (factor ~10) o $O(n^2)$ (factor ~100).
